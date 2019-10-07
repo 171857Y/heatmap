@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Heatmap</title>
+<!-- 
+Magazee Template 
+http://www.templatemo.com/tm-514-magazee
+-->
+  <!-- load CSS -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400">    <!-- Google web font "Open Sans" -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">                                        <!-- https://getbootstrap.com/ -->
+  <link rel="stylesheet" href="css/templatemo-style.css">                                     <!-- Templatemo style -->
+
+  <script>
+    var renderPage = true;
+
+    if(navigator.userAgent.indexOf('MSIE')!==-1
+      || navigator.appVersion.indexOf('Trident/') > 0){
+        /* Microsoft Internet Explorer detected in. */
+        alert("Please view this in a modern browser such as Chrome or Microsoft Edge.");
+        renderPage = false;
+    }
+  </script>
+
+</head>
+
+<body>
+  <!-- Loader -->
+  <div id="loader-wrapper">
+    <div id="loader"></div>
+    <div class="loader-section section-left"></div>
+    <div class="loader-section section-right"></div>
+  </div>
+
+ <div class="container">
+
+  <!-- 1st section -->
+  <section class="row tm-section">
+   <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 p-0">
+    <div class="tm-flex-center p-5 tm-bg-color-primary tm-section-min-h">
+      <h1 class="tm-text-color-white tm-site-name">Heatmap</h1>
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+    <div class="tm-flex-center p-5">
+      <p class="tm-text-color-gray">A heatmap is a graphical representation of data that uses a system of color-coding to represent different values. 
+	  Heatmaps are used in various forms of analytics but are most commonly used to show user behaviour on specific webpages or webpage templates
+	  </p>
+    </div>
+  </div>
+</section>
+
+<!-- 2nd section -->
+<section class="row tm-section tm-col-md-reverse">
+ <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+  <div class="tm-flex-center p-5">
+    <div class="tm-md-flex-center">
+      <h2 class="tm-text-color-primary mb-4"><strong>Implementation in Math</strong></h2>
+      <p class="mb-4">With heatmap, it would be easy for educators to visualise each of their class results easily.
+	  For example, they would just need to record down every of their students' results and plot it on the heatmap.
+	  Within a glance, they are able to see their class performance. A well performed class would consist of darker shades.</p>
+    </div>
+  </div>
+</div>
+ <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 p-0 text-center">
+    <img src="img/image-04.jpg" alt="Image" class="img-fluid">
+  </div>
+</section>
+
+<!-- 3rd Section -->
+<section class="row tm-section tm-mb-30">
+<div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+    <div class="tm-flex-center p-5 tm-bg-color-primary tm-section-min-h" style="color: white">
+      <div class="tm-flex-center tm-flex-col">
+        <h2 class="tm-align-left"><strong>Example</strong></h2> <br />
+        <p>
+		With the data set from shipping company, we can identify the three main categories which they deliver.<br />
+		A darker colour shade meant that the profits belong to the higher range while lighter colour shade meant that the profit is relatively low.<br /><br />
+		Looking at the heatmap, we can identify that the highest profit earned from the categories is Technology, especially in the last quarter of the years.
+		<br /><br />This can be an insight for the shipping company on how they should target future customers with different forms of promotions to increase their profit for other months and categories.
+		<i>(Hover over to view profit)</i>
+		</p>
+        
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 p-0 text-center">
+   <!-- Load d3.js -->
+				<script src="https://d3js.org/d3.v4.js"></script>
+				<br />
+				<br />
+				<h5>Profit Earned from Different Categories.</h5>
+				<p>Hover over to view exact amount.</p>
+				<!-- Create a div where the graph will take place -->
+				<div id="heatMap"></div>
+
+
+				<script>
+
+				// set the dimensions and heatMargs of the graph
+				var heatMarg = {top: 30, right: 30, bottom: 30, left: 30},
+				  heatWidth = 450 - heatMarg.left - heatMarg.right,
+				  heatHeight = 450 - heatMarg.top - heatMarg.bottom;
+
+				// append the svg object to the body of the page
+				var heatSVG = d3.select("#heatMap")
+				.append("svg")
+				  .attr("width", heatWidth + heatMarg.left + heatMarg.right)
+				  .attr("height", heatHeight + heatMarg.top + heatMarg.bottom)
+				.append("g")
+				  .attr("transform",
+						"translate(" + heatMarg.left + "," + heatMarg.top + ")");
+
+				// Labels of row and columns
+				var myGroups = ["Furniture", "Office Supplies", "Technology"]
+				var myVars = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+				// Build X scales and axis:
+				var x = d3.scaleBand()
+				  .range([ 0, heatWidth ])
+				  .domain(myGroups)
+				  .padding(0.01);
+				heatSVG.append("g")
+				  .attr("transform", "translate(0," + heatHeight + ")")
+				  .call(d3.axisBottom(x))
+
+				// Build X scales and axis:
+				var y = d3.scaleBand()
+				  .range([ heatHeight, 0 ])
+				  .domain(myVars)
+				  .padding(0.01);
+				heatSVG.append("g")
+				  .call(d3.axisLeft(y));
+
+				// Build color scale
+				var myColor = d3.scaleLinear()
+				  .range(["#e0c1c1", "#7a2828"])
+				  .domain([0,18000])
+
+				//Read the data
+				d3.csv("excel/heatmap.csv", function(data) {
+
+				  // create a heatMap
+				  var heatMap = d3.select("#heatMap")
+					.append("div")
+					.style("opacity", 0)
+					.attr("class", "heatMap")
+					.style("background-color", "white")
+					.style("border", "solid")
+					.style("border-width", "2px")
+					.style("border-radius", "5px")
+					.style("padding", "5px")
+
+				  // Three function that change the heatMap when user hover / move / leave a cell
+				  var heatmouseover = function(d) {
+					heatMap.style("opacity", 1)
+				  }
+				  var heatmousemove = function(d) {
+					heatMap
+					  .html("Profit: $" + d.value)
+					  .style("left", (d3.mouse(this)[0]+0) + "px")
+					  .style("top", (d3.mouse(this)[1]) + "px")
+				  }
+				  var heatmouseleave = function(d) {
+					heatMap.style("opacity", 0)
+				  }
+
+				  // add the squares
+				  heatSVG.selectAll()
+					.data(data, function(d) {return d.group+':'+d.variable;})
+					.enter()
+					.append("rect")
+					  .attr("x", function(d) { return x(d.group) })
+					  .attr("y", function(d) { return y(d.variable) })
+					  .attr("width", x.bandwidth() )
+					  .attr("height", y.bandwidth() )
+					  .style("fill", function(d) { return myColor(d.value)} )
+					.on("mouseover", heatmouseover)
+					.on("mousemove", heatmousemove)
+					.on("mouseleave", heatmouseleave)
+				})
+
+				</script>
+  </div>
+  
+</section>
+
+
+</div>
+<!-- load JS -->
+<script src="js/jquery-3.2.1.slim.min.js"></script>         <!-- https://jquery.com/ -->
+<script>
+
+  /* DOM is ready
+  ------------------------------------------------*/
+  $(function(){
+
+    if(renderPage) {
+      $('body').addClass('loaded');
+    }
+
+    $('.tm-current-year').text(new Date().getFullYear());  // Update year in copyright
+  });
+
+</script>
+
+</body>
+</html>
